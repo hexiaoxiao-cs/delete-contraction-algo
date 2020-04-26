@@ -22,8 +22,14 @@ public class Vertex {
 			System.out.println("Trying to delete non-existing edge in "+num+" that connects "+v);
 			return -1;
 		}
-		this.edge.remove(v);
+		this.edge.remove(this.edge.indexOf(v));
 		return 0;
+	}
+	
+	public Vertex clone() {
+		Vertex v = new Vertex(this.num);
+		v.edge=(ArrayList<Integer>)this.edge.clone();
+		return v;
 	}
 	
 	public boolean equals(int num) {
