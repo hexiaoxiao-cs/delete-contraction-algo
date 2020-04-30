@@ -41,8 +41,7 @@ public class DeletionContractionAlgo {
 		return null;
 	}
 	
-	
-	
+
 	public static boolean check_Loop(Graph g, int v1, int v2) {
 		Graph g2=g.clone();
 		if(g2.delete_edge(v1, v2)!=0) {System.out.println("check_Loop deleting non-existing edge");return false;}
@@ -72,8 +71,26 @@ public class DeletionContractionAlgo {
 
 		return false;
 	}
-	
-
+	public static boolean isConnected(Graph g) {
+		for(Vertex a : g.vertices) {//faster
+			if(a.edge.size()==0) {return false;}
+		}
+		//slower check
+		visited=new boolean[g.num];
+		DFS_check(g,0);
+		for(int i = 0; i< g.num; i++) {
+			if(visited[i]==false) {return false;}
+		}
+		return true;
+	}
+	public static void DFS_check(Graph g, int v) {
+		if(visited[v]==true) {return;}
+		visited[v]=true;
+		for(int a : g.vertices.get(g.vertices.indexOf(new Vertex(v))).edge) {
+			DFS_check(g,a);
+		}
+		return;
+	}
 	
 	public static boolean check_Cut(Graph g, int v1, int v2) {
 		Graph g2=g.clone();
@@ -98,23 +115,74 @@ public class DeletionContractionAlgo {
 	}
 	
 	
+	public static Graph generate_cycle(int n) {
+		Graph g= new Graph(n);
+		for(int i = 0; i < n-1; i ++) {
+			g.add_edge(i, i+1);
+		}
+		return g;
+	}
+	
+	public static Graph randomized_graph(int n, double p) {
+		Graph g = new Graph(n);
+		Random r= new Random();
+		for(int i = 0; i < n; i++) {
+			for(int j = i+1; j< n; j++) {
+				if(r.nextDouble()<p) {
+					g.add_edge(i, j);
+				}
+			}
+		}
+		
+		
+		return g;
+	}
+	
+	public static int getMaxDeg(Graph g) {
+		int max = 0;
+		for(Vertex v : g.vertices) {
+			if(v.edge.size()>max) {
+				max=v.edge.size();
+			}
+		}
+		return max;
+		
+	}
+	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		int k=0;
-		Graph g = new Graph(4);
-		g.add_edge(0, 1);
-		g.add_edge(0, 3);
-		g.add_edge(1, 2);
-		g.add_edge(2, 3);
+		Graph g;
+		int num = 10;
+		double prob=0.80;
+		int times = 10000;
+		System.out.println("Current Parameters:");
+		System.out.println("Number of vertices: "+ num);
+		System.out.println("Probability: "+ prob);
+		System.out.println("Iterations: "+ times);
+		System.out.println("Delta,Chi");
+		for(int l = 0; l < times; l++) {
+		while(true) {
+		g = randomized_graph(num,prob);
+		if(isConnected(g)==true) {break;}
+		}
+//		g.show_adj();
+//		g.add_edge(0, 1);
+//		g.add_edge(0, 3);
+//		g.add_edge(1, 2);
+//		g.add_edge(2, 3);
+//		g.add_edge(v1, v2)
 //		g.add_edge(0, 2);
 //		g.add_edge(1, 3);
-		for(int i = 0; i <= g.num;i++) {
+//		System.out.println(get_Chi(g,3));
+		for(int i = 2; i <= g.num;i++) {
 			if(get_Chi(g,i)>0) {
 				k=i;
 				break;
 			}
 		}
-		System.out.println(k);
+		
+		System.out.println(getMaxDeg(g)+","+k);
+		}
 //		g.show_adj();
 //		g.deletion(0, 1).show_adj();
 //		g.contraction(0, 2).show_adj();;

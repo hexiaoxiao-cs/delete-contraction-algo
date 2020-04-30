@@ -10,7 +10,7 @@ public class Vertex {
 	}
 	public int add_edge(int v) {
 		if(this.edge.contains(v)==true) {
-			System.out.println("Trying to add repeating edge in "+num+" that connects "+v);
+			//System.out.println("Trying to add repeating edge in "+num+" that connects "+v);
 			return -1;
 		}
 		this.edge.add(v);
@@ -19,7 +19,7 @@ public class Vertex {
 	
 	public int delete_edge(int v) {
 		if(this.edge.contains(v)==false) {
-			System.out.println("Trying to delete non-existing edge in "+num+" that connects "+v);
+			//System.out.println("Trying to delete non-existing edge in "+num+" that connects "+v);
 			return -1;
 		}
 		this.edge.remove(this.edge.indexOf(v));
